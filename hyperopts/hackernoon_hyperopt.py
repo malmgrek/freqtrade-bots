@@ -97,28 +97,8 @@ class HackerNoonHyperopt(IHyperOpt):
         Define your Hyperopt space for searching sell strategy parameters.
         """
         return [
-            Real(-10, 10, name='sell-sar-value'),
-            Real(-10, 10, name='sell-fisher-value'),
+            Real(-1.0, 0.01, name='sell-sar-value'),
+            Real(0.0, 1.0, name='sell-fisher-value'),
             Categorical([True, False], name='sell-sar-enabled'),
             Categorical([True, False], name='sell-fisher-enabled'),
         ]
-
-    def populate_buy_trend(self, dataframe, metadata):
-        dataframe.loc[
-            (
-                (dataframe["rsi"] < 17) &
-                (dataframe["bb_lowerband"] > dataframe["close"])
-            ),
-            "buy"
-        ] = 1
-        return dataframe
-
-    def populate_sell_trend(self, dataframe, metadata):
-        dataframe.loc[
-            (
-                (dataframe["sar"] > -0.88) &
-                (dataframe["fisher"] > -0.38)
-            ),
-            "sell"
-        ] = 1
-        return dataframe

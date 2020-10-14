@@ -9,8 +9,13 @@ import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 class HackerNoonStrategy(IStrategy):
     INTERFACE_VERSION = 2
-    # minimal_roi = {"60": 0.01, "30": 0.02, "0": 0.04}
-    stoploss = -0.10
+    minimal_roi = {
+        "0": 0.05735,
+        "10": 0.03845,
+        "55": 0.01574,
+        "157": 0
+    }
+    stoploss = -0.30566
     # timeframe = "5m"
     # process_only_new_candles = False
     # use_sell_signal = True
@@ -40,7 +45,7 @@ class HackerNoonStrategy(IStrategy):
     def populate_buy_trend(self, dataframe, metadata):
         dataframe.loc[
             (
-                (dataframe["rsi"] < 17) &
+                (dataframe["rsi"] < 20) &
                 (dataframe["bb_lowerband"] > dataframe["close"])
             ),
             "buy"
@@ -50,8 +55,8 @@ class HackerNoonStrategy(IStrategy):
     def populate_sell_trend(self, dataframe, metadata):
         dataframe.loc[
             (
-                (dataframe["sar"] > -0.88) &
-                (dataframe["fisher"] > -0.38)
+                # (dataframe["sar"] > -0.0.06414) &
+                (dataframe["fisher"] > -0.13955)
             ),
             "sell"
         ] = 1
