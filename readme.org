@@ -1,0 +1,9 @@
+#+TITLE: Readme
+
+* Installing Freqtrade on a Redhat Linux
+- Install TA-lib using the installation script in =install_ta-lib.sh=
+- Set environment variable =export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH=
+* Instructions
+TODO
+* Notes
+TODO
