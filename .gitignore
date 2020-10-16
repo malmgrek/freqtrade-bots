@@ -1,2 +1,4 @@
+*.sqlite
 *.swp
 __pycache__
+config.json
