@@ -1,9 +1,21 @@
 #+TITLE: Readme
 
-* Installing Freqtrade on a Redhat Linux
-- Install TA-lib using the installation script in =install_ta-lib.sh=
-- Set environment variable =export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH=
+Example configurations, strategies, and hyperopt definitions for the crypto trading bot tool [[https://www.freqtrade.io/en/latest/][Freqtrade]].
+
 * Instructions
-TODO
+** Shorthands for useful Freqtrade commands
+- Enable by running =source runners.sh=
+
 * Notes
-TODO
+** Installing Freqtrade on a Redhat Linux
+- Install TA-lib using the installation script in =install_ta-lib.sh=
+- Setting environment variable =export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH=
+  was able to fix a TA-lib ImportError (verify if needed)
+** Installing on Raspberry OS (on Raspberry Pi 4)
+- Install TA-lib using the installation script in =install_ta-lib.sh=
+- Create and source the virtual environment, after which run
+  1. =python3 -m pip install --upgrade pip=
+  2. =pip install Cython= (Solves ImportError)
+  3. =python3 -m install -e .=
+- Multidict version conflict when running the bot
+  - Run =pip install multidict==4.5.0=
