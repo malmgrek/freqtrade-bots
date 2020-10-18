@@ -7,7 +7,7 @@ import talib.abstract as ta
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 
-class HackerNoonStrategy(IStrategy):
+class HackerNoon(IStrategy):
     INTERFACE_VERSION = 2
     minimal_roi = {
         "0": 0.05735,

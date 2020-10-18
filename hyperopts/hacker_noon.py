@@ -17,7 +17,7 @@ import talib.abstract as ta  # noqa
 import freqtrade.vendor.qtpylib.indicators as qtpylib
 
 
-class HackerNoonHyperOpt(IHyperOpt):
+class HackerNoon(IHyperOpt):
 
     @staticmethod
     def buy_strategy_generator(params: Dict[str, Any]) -> Callable:
