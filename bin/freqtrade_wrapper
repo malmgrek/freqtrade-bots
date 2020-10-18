@@ -1,50 +1,27 @@
 #!/bin/bash
 
-config=~/src/freqtrade-strategies/config.json
-data_dir=~/src/freqtrade/user_data/data/binance
-hyperopt=HackerNoonHyperOpt
-hyperopt_loss=SharpeHyperOptLossDaily
-hyperopt_path=~/src/freqtrade-strategies/hyperopts
-strategy=HackerNoonStrategy
-strategy_path=~/src/freqtrade-strategies/strategies
-user_data_dir=~/src/freqtrade/user_data
+CONFIG=~/src/freqtrade-strategies/config.json
+DATA_DIR=~/src/freqtrade/user_data/data/binance
+HYPEROPT_LOSS=SharpeHyperOptLossDaily
+HYPEROPT_PATH=~/src/freqtrade-strategies/hyperopts
+STRATEGY_PATH=~/src/freqtrade-strategies/strategies
+USER_DATA_DIR=~/src/freqtrade/user_data
 
 
-function hyperopt() {
-  freqtrade hyperopt \
-    --config $config \
-    --datadir $data_dir \
-    --hyperopt-path $hyperopt_path \
-    --hyperopt $hyperopt \
-    --hyperopt-loss $hyperopt_loss \
-    --strategy $strategy \
-    --strategy-path $strategy_path \
-    --user-data-dir $user_data_dir
-}
-
-
-function backtesting() {
-  freqtrade backtesting \
-    --config $config \
-    --datadir $data_dir \
-    --export t \
-    --strategy $strategy \
-    --strategy-path $strategy_path \
-    --user-data-dir $user_data_dir
-}
-
-
-function trade() {
-  freqtrade trade \
-    --config $config \
-    --datadir $data_dir \
-    --strategy $strategy \
-    --strategy-path $strategy_path \
-    --user-data-dir $user_data_dir
-}
-
-
-while getopts "v:tbh" o;
+# Parameters
+# ----------
+#
+# v: Path to Python virtual environment activation script
+# t: Flag for trade mode
+# b: Flag for backtesting mode
+# h: Flag for hypertopt mode
+# s: Strategy class name
+# h: Hyperopt class name
+# l: Hyperopt loss class name (optional)
+#
+# TODO: Help
+#
+while getopts "v:tbhs:h:l:" o;
 do
   case "${o}" in
     v)
@@ -52,14 +29,42 @@ do
       # Must be the first argument
       source ${OPTARG}
       ;;
-    t)
-      trade
-      ;;
-    b)
-      backtesting
+    s)
+      strategy=${OPTARG}
       ;;
     h)
-      hyperopt
+      hyperopt=${OPTARG}
+      ;;
+    l)
+      hyperopt_loss=${OPTARG}
+      ;;
+    t)
+      freqtrade trade \
+        --config $CONFIG \
+        --datadir $DATA_DIR \
+        --strategy $strategy \
+        --strategy-path $STRATEGY_PATH \
+        --user-data-dir $USER_DATA_DIR
+      ;;
+    b)
+      freqtrade backtesting \
+        --config $CONFIG \
+        --datadir $DATA_DIR \
+        --export t \
+        --strategy "$strategy" \
+        --strategy-path $STRATEGY_PATH \
+        --user-data-dir $USER_DATA_DIR
+      ;;
+    h)
+      freqtrade hyperopt \
+        --config $CONFIG \
+        --datadir $DATA_DIR \
+        --hyperopt-path $HYPEROPT_PATH \
+        --hyperopt "$hyperopt" \
+        --hyperopt-loss "${hyperopt_loss:-HYPEROPT_LOSS}" \
+        --strategy "$strategy" \
+        --strategy-path $STRATEGY_PATH \
+        --user-data-dir $USER_DATA_DIR
       ;;
   esac
 done
