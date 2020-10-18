@@ -25,12 +25,31 @@ function with_permission () {
 }
 
 
+function stop_bots () {
+  for strategy in $@
+  do
+    service="$(snake_case $strategy).service"
+    systemctl --user stop $service
+    echo "Stopped Systemd service $service"
+  done
+}
+
+
+function status_bots () {
+  for strategy in $@
+  do
+    service="$(snake_case $strategy).service"
+    systemctl --user status $service
+    echo
+  done
+}
+
+
 mkdir -p $jobdir
 
 
 for strategy in $@
 do
-
   # Maps CamelCase to snake_case
   job="$jobdir/$(snake_case $strategy).service"
   rm $job
@@ -46,7 +65,6 @@ do
   echo ""                                                               >> $job
   echo "[Install]"                                                      >> $job
   echo "WantedBy=default.target"                                        >> $job
-
 done
 
 
@@ -55,10 +73,8 @@ systemctl --user daemon-reload
 
 for strategy in $@
 do
-
   systemctl --user start "$(snake_case $strategy).service"
   echo "Deployed a Freqtrade bot with strategy $strategy"
-
 done
 
 
