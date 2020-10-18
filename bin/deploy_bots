@@ -3,10 +3,10 @@
 # Deploy an arbitrary number of strategies
 
 
-work=$HOME/src/freqtrade-strategies
-freqtrade=$HOME/src/freqtrade
-freqtrade_wrapper=$work/bin/freqtrade_wrapper
-activate=$freqtrade/.env/bin/activate
+work="%h/src/freqtrade-strategies"
+freqtrade="%h/src/freqtrade"
+freqtrade_wrapper="$work/bin/freqtrade_wrapper"
+activate="$freqtrade/.env/bin/activate"
 jobdir=$HOME/.config/systemd/user
 
 
@@ -16,13 +16,11 @@ function snake_case() {
 
 
 function with_permission () {
-  question=$1
-  dangerous_stuff=$2
-  read -p  -n 1 -r
+  read -p "$2" -n 1 -r
   echo    # (optional) move to a new line
   if [[ $REPLY =~ ^[Yy]$ ]]
   then
-    $dangerous_stuff
+    $1
   fi
 }
 
@@ -35,18 +33,19 @@ do
 
   # Maps CamelCase to snake_case
   job="$jobdir/$(snake_case $strategy).service"
+  rm $job
   touch $job
-  echo "[Unit]"                                                      >> $job
-  echo "Description=Freqtrade $strategy daemon"                      >> $job
-  echo "After=network.target"                                        >> $job
-  echo ""                                                            >> $job
-  echo "[Service]"                                                   >> $job
-  echo "WorkingDirectory=$work"                                      >> $job
-  echo "ExecStart=bash $freqtrade_wrapper -v $activate -s $strategy" >> $job
-  echo "Restart=on-failure"                                          >> $job
-  echo ""                                                            >> $job
-  echo "[Install]"                                                   >> $job
-  echo "WantedBy=default.target"                                     >> $job
+  echo "[Unit]"                                                         >> $job
+  echo "Description=Freqtrade $strategy daemon"                         >> $job
+  echo "After=network.target"                                           >> $job
+  echo ""                                                               >> $job
+  echo "[Service]"                                                      >> $job
+  echo "WorkingDirectory=$work"                                         >> $job
+  echo "ExecStart=bash $freqtrade_wrapper -v $activate -s $strategy -t" >> $job
+  echo "Restart=on-failure"                                             >> $job
+  echo ""                                                               >> $job
+  echo "[Install]"                                                      >> $job
+  echo "WantedBy=default.target"                                        >> $job
 
 done
 
