@@ -3,8 +3,7 @@
 Example configurations, strategies, and hyperopt definitions for the crypto trading bot tool [[https://www.freqtrade.io/en/latest/][Freqtrade]].
 
 * Instructions
-** Shorthands for useful Freqtrade commands
-- Enable by running =source runners.sh=
+** TODO
 
 * Notes
 ** Installing Freqtrade on a Redhat Linux
@@ -19,3 +18,7 @@ Example configurations, strategies, and hyperopt definitions for the crypto trad
   3. =python3 -m install -e .=
 - Multidict version conflict when running the bot
   - Run =pip install multidict==4.5.0=
+* TODO
+- Enable deploying multiple bots simultaneously
+  + They all need to have own =config.json= and database file (i.e. working directory)
+  + Significant refactor: Each bot in own directory with run script and Python codes
