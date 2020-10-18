@@ -1,0 +1,28 @@
+# NOTE: Setup systemd job
+# -----------------------
+# 1. Copy to ~/.config/systemd/user/freqtrade.service
+# 2. Reload daemon ``systemctl --user daemon-reload``
+# 3. Start service ``systemctl --user start freqtrade.service``
+# 4. Stop serviec ``systemctl --user stop freqtrade.service``
+#
+# NOTE: It is possible that journald doesn't start on Raspberry Pi 4.
+#       In that case running ``sudo systemctl restart systemd-journald.service``
+#       might help.
+#
+# NOTE: To enable lingering usage, run also
+#       ``sudo loginctl enable-linger $USER``
+
+[Unit]
+Description=Freqtrade Daemon
+After=network.target
+
+[Service]
+# Set WorkingDirectory and ExecStart to your file paths accordingly
+# NOTE: %h will be resolved to /home/<username>
+WorkingDirectory=%h/src/freqtrade-strategies
+ExecStart=bash %h/src/freqtrade-strategies/bin/freqtrade_wrapper -v %h/src/freqtrade/.env/bin/activate -t
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
+
