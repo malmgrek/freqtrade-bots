@@ -1,3 +1,5 @@
+#!/bin/bash
+
 config=~/src/freqtrade-strategies/config.json
 data_dir=~/src/freqtrade/user_data/data/binance
 hyperopt=HackerNoonHyperOpt
@@ -8,7 +10,7 @@ strategy_path=~/src/freqtrade-strategies/strategies
 user_data_dir=~/src/freqtrade/user_data
 
 
-function run_freqtrade_hyperopt() {
+function hyperopt() {
   freqtrade hyperopt \
     --config $config \
     --datadir $data_dir \
@@ -21,7 +23,7 @@ function run_freqtrade_hyperopt() {
 }
 
 
-function run_freqtrade_backtesting() {
+function backtesting() {
   freqtrade backtesting \
     --config $config \
     --datadir $data_dir \
@@ -32,7 +34,7 @@ function run_freqtrade_backtesting() {
 }
 
 
-function run_freqtrade_bot() {
+function trade() {
   freqtrade trade \
     --config $config \
     --datadir $data_dir \
@@ -40,3 +42,25 @@ function run_freqtrade_bot() {
     --strategy-path $strategy_path \
     --user-data-dir $user_data_dir
 }
+
+
+while getopts "v:tbh" o;
+do
+  case "${o}" in
+    v)
+      # Activate e.g. a virtual env
+      # Must be the first argument
+      source ${OPTARG}
+      ;;
+    t)
+      trade
+      ;;
+    b)
+      backtesting
+      ;;
+    h)
+      hyperopt
+      ;;
+  esac
+done
+
