@@ -1,24 +1,33 @@
 #+TITLE: Readme
 
-Example configurations, strategies, and hyperopt definitions for the crypto trading bot tool [[https://www.freqtrade.io/en/latest/][Freqtrade]].
+The aim of this project is the help deploying many cryptocurrency trading bots
+developed with [[https://www.freqtrade.io/en/latest/][Freqtrade]]. The project essentially provides
 
-* Instructions
-** TODO
+- A clear directory structure for managing bot specific strategies and
+  hyperparameter optimization programs,
+- A deployment script that allows deploying a group of user defined trading bots
+  simultaneously using Systemd.
 
-* Notes
-** Installing Freqtrade on a Redhat Linux
+* Guide
+** Installation
+We mainly follow the [[https://www.freqtrade.io/en/latest/installation/][Freqtrade]] installation instructions. It is assumed that
+/Freqtrade/ and /Freqtrade bots/ are cloned in the user home directory. Some
+additional notes in various systems:
+*** Additional remarks
+**** Installing Freqtrade on a Redhat Linux
 - Install TA-lib using the installation script in =install_ta-lib.sh=
 - Setting environment variable =export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH=
   was able to fix a TA-lib ImportError (verify if needed)
-** Installing on Raspberry OS (on Raspberry Pi 4)
+**** Installing Freqtrade on Raspberry OS (on Raspberry Pi 4)
 - Install TA-lib using the installation script in =install_ta-lib.sh=
 - Create and source the virtual environment, after which run
   1. =python3 -m pip install --upgrade pip=
   2. =pip install Cython= (Solves ImportError)
-  3. =python3 -m install -e .=
+  3. =python3 -m pip install -e .=
 - Multidict version conflict when running the bot
-  - Run =pip install multidict==4.5.0=
-* TODO
-- Enable deploying multiple bots simultaneously
-  + They all need to have own =config.json= and database file (i.e. working directory)
-  + Significant refactor: Each bot in own directory with run script and Python codes
+  - =pip install multidict==4.5.0=
+** Usage
+- Add new bot definitions under the directory =bots=
+- Deploy by running =bash bin/deploy-bots MyAwesomeBot1 MyAwesomeBot2=
+- Stop bots with =stop_bots= (defined in deployment script)
+- Bots' status with =status_bots= (defined in deployment script)

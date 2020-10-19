@@ -21,3 +21,17 @@ function freqtrade_wrapper () {
   deactivate
 }
 
+
+function snake_case() {
+  echo $1 | sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'
+}
+
+
+function with_permission () {
+  read -p "$2" -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    $1
+  fi
+}

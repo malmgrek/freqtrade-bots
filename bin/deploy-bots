@@ -3,25 +3,12 @@
 # Deploy an arbitrary number of strategies
 # TODO Install everything to home directory
 
+# <- with_permission
+source $HOME/freqtrade-bots/bin/utils.sh
 
 freqtrade_bots="%h/freqtrade-bots"  # TODO Refactor install location
 freqtrade="%h/freqtrade"  # TODO Refactor install location
 systemd_dir=$HOME/.config/systemd/user
-
-
-function snake_case() {
-  echo $1 | sed -r 's/([A-Z])/_\L\1/g' | sed 's/^_//'
-}
-
-
-function with_permission () {
-  read -p "$2" -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ $REPLY =~ ^[Yy]$ ]]
-  then
-    $1
-  fi
-}
 
 
 function stop_bots () {
@@ -44,13 +31,14 @@ function status_bots () {
 }
 
 
+# Make sure user's Systemd dir exists
 mkdir -p $systemd_dir
 
 
 for bot in $@
 do
   # Maps CamelCase to snake_case
-  f="$systemd_dir/$(snake_case $strategy).service"
+  f="$systemd_dir/$bot.service"
   rm $f
   touch $f
   echo "[Unit]"                                    >> $f
@@ -72,7 +60,7 @@ systemctl --user daemon-reload
 
 for bot in $@
 do
-  systemctl --user start "$(snake_case $bot).service"
+  systemctl --user start "$bot.service"
   echo "Deployed a Freqtrade bot with strategy $bot"
 done
 
