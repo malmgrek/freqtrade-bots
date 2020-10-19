@@ -6,7 +6,12 @@ source $HOME/freqtrade-bots/bin/utils.sh
 
 with_permission \
     "git clone https://github.com/freqtrade/freqtrade.git --depth 10 $HOME/freqtrade" \
-    "Clone Freqtrade to $HOME?"
+    "Clone Freqtrade to $HOME? "
+
+
+with_permission \
+    "sudo $HOME/freqtrade/build_helpers/install_ta-lib.sh" \
+    "Install TA-lib? "
 
 
 echo "Create and source .env..."
