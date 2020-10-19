@@ -1,13 +1,12 @@
 #!/bin/bash
 
 # Deploy an arbitrary number of strategies
+# TODO Install everything to home directory
 
 
-work="%h/src/freqtrade-strategies"
-freqtrade="%h/src/freqtrade"
-freqtrade_wrapper="$work/bin/freqtrade_wrapper"
-activate="$freqtrade/.env/bin/activate"
-jobdir=$HOME/.config/systemd/user
+freqtrade_bots="%h/freqtrade-bots"  # TODO Refactor install location
+freqtrade="%h/freqtrade"  # TODO Refactor install location
+systemd_dir=$HOME/.config/systemd/user
 
 
 function snake_case() {
@@ -26,9 +25,9 @@ function with_permission () {
 
 
 function stop_bots () {
-  for strategy in $@
+  for bot in $@
   do
-    service="$(snake_case $strategy).service"
+    service="$bot.service"
     systemctl --user stop $service
     echo "Stopped Systemd service $service"
   done
@@ -36,47 +35,51 @@ function stop_bots () {
 
 
 function status_bots () {
-  for strategy in $@
+  for bot in $@
   do
-    service="$(snake_case $strategy).service"
+    service="$bot.service"
     systemctl --user status $service
     echo
   done
 }
 
 
-mkdir -p $jobdir
+mkdir -p $systemd_dir
 
 
-for strategy in $@
+for bot in $@
 do
   # Maps CamelCase to snake_case
-  job="$jobdir/$(snake_case $strategy).service"
-  rm $job
-  touch $job
-  echo "[Unit]"                                                         >> $job
-  echo "Description=Freqtrade $strategy daemon"                         >> $job
-  echo "After=network.target"                                           >> $job
-  echo ""                                                               >> $job
-  echo "[Service]"                                                      >> $job
-  echo "WorkingDirectory=$work"                                         >> $job
-  echo "ExecStart=bash $freqtrade_wrapper -v $activate -s $strategy -t" >> $job
-  echo "Restart=on-failure"                                             >> $job
-  echo ""                                                               >> $job
-  echo "[Install]"                                                      >> $job
-  echo "WantedBy=default.target"                                        >> $job
+  f="$systemd_dir/$(snake_case $strategy).service"
+  rm $f
+  touch $f
+  echo "[Unit]"                                    >> $f
+  echo "Description=Freqtrade $bot daemon"         >> $f
+  echo "After=network.target"                      >> $f
+  echo ""                                          >> $f
+  echo "[Service]"                                 >> $f
+  echo "WorkingDirectory=$freqtrade_bots/$bot"     >> $f
+  echo "ExecStart=bash $freqtrade_bots/$bot/run"   >> $f
+  echo "Restart=on-failure"                        >> $f
+  echo ""                                          >> $f
+  echo "[Install]"                                 >> $f
+  echo "WantedBy=default.target"                   >> $f
 done
 
 
 systemctl --user daemon-reload
 
 
-for strategy in $@
+for bot in $@
 do
-  systemctl --user start "$(snake_case $strategy).service"
-  echo "Deployed a Freqtrade bot with strategy $strategy"
+  systemctl --user start "$(snake_case $bot).service"
+  echo "Deployed a Freqtrade bot with strategy $bot"
 done
 
 
-with_permission "sudo loginctl enable-linger $USER" "Enable lingering mode for user $USER?"
-with_permission "sudo systemctl restart systemd-journald.service" "Restart Journald service?"
+with_permission \
+  "sudo loginctl enable-linger $USER" \
+  "Enable lingering mode for user $USER?"
+with_permission \
+  "sudo systemctl restart systemd-journald.service" \
+  "Restart Journald service?"

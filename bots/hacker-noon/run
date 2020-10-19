@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# TODO Add as template to the project root w/ instructions
+
+dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+exchange=binance
+strategy=HackerNoon
+hyperopt=HackerNoon
+
+
+# Import utilities
+source $dir/../../bin/utils.sh
+
+
+# Create user_data directory
+mkdir_user_data $dir $exchange
+
+
+function _run () {
+  freqtrade_wrapper $@ \
+  --strategy-path $dir/strategies \
+  --config $dir/config.json \
+  --user-data-dir $dir/user_data \
+  --datadir $dir/../../data/$exchange \
+  --strategy $strategy
+}
+
+
+mode=$1
+if [[ $mode = "hyperopt" ]]; then
+  _run $@ --hyperopt-path $dir/hyperopts --hyperopt $hyperopt
+else
+  _run $@
+fi
+
+
+unset -f _run
+
