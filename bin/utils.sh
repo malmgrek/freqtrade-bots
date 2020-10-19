@@ -6,7 +6,7 @@ function mkdir_user_data () {
   local exchange=$2
   local user_data=$dir/user_data
   mkdir -p $user_data/backtest_results
-  mkdir -p $user_data/data/$exchange
+  mkdir -p $HOME/freqtrade-bots/data/$exchange
   mkdir -p $user_data/logs
   mkdir -p $user_data/notebooks
 }
