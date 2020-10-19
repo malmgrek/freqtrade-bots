@@ -21,11 +21,14 @@ additional notes in various systems:
 **** Installing Freqtrade on Raspberry OS (on Raspberry Pi 4)
 - Install TA-lib using the installation script in =install_ta-lib.sh=
 - Create and source the virtual environment, after which run
-  1. =python3 -m pip install --upgrade pip=
-  2. =pip install Cython= (Solves ImportError)
-  3. =python3 -m pip install -e .=
-- Multidict version conflict when running the bot
-  - =pip install multidict==4.5.0=
+  1. =python3 -m venv .env && source .env/bin/activate=
+  2. =python3 -m pip install --upgrade pip=
+  3. =python3 -m pip install --upgrade Cython= (Solves ImportError)
+  4. =python3 -m pip install --upgrade -r requirements.txt=
+     - Use =requirements-dev.txt= for hyperoptimization module
+  5. =python3 -m pip install -e .=
+**** CCXT > 1.36.12
+- =ccxt= buggy
 ** Usage
 - Add new bot definitions under the directory =bots=
 - Deploy by running =bash bin/deploy-bots MyAwesomeBot1 MyAwesomeBot2=
