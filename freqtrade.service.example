@@ -19,8 +19,8 @@ After=network.target
 [Service]
 # Set WorkingDirectory and ExecStart to your file paths accordingly
 # NOTE: %h will be resolved to /home/<username>
-WorkingDirectory=%h/src/freqtrade-strategies
-ExecStart=bash %h/src/freqtrade-strategies/bin/freqtrade_wrapper -v %h/src/freqtrade/.env/bin/activate -t
+WorkingDirectory=%h/freqtrade-strategies
+ExecStart=bash %h/freqtrade-strategies/bin/freqtrade_wrapper -v %h/freqtrade/.env/bin/activate -t
 Restart=on-failure
 
 [Install]

@@ -16,7 +16,7 @@ function freqtrade_wrapper () {
   # TODO Make a makefile so that this is not hard coded
   # Activate the freqtrade virtual environment
   # so that we can run freqtrade
-  source $HOME/src/freqtrade/.env/bin/activate
+  source $HOME/freqtrade/.env/bin/activate
   freqtrade $@
   deactivate
 }
