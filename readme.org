@@ -19,9 +19,7 @@ additional notes in various systems:
 - Setting environment variable =export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH=
   was able to fix a TA-lib ImportError (verify if needed)
 **** Installing Freqtrade on Raspberry OS (on Raspberry Pi 4)
-Run / go through =./install.sh=
-**** CCXT > 1.36.12
-- =ccxt= buggy
+Run (or manually go through) =./install.sh=
 ** Usage
 - Add new bot definitions under the directory =bots=
 - Deploy by running =bash bin/deploy-bots MyAwesomeBot1 MyAwesomeBot2=
