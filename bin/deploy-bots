@@ -41,17 +41,17 @@ do
   f="$systemd_dir/$bot.service"
   rm -f $f  # force remove to avoid complaints
   touch $f
-  echo "[Unit]"                                    >> $f
-  echo "Description=Freqtrade $bot daemon"         >> $f
-  echo "After=network.target"                      >> $f
-  echo ""                                          >> $f
-  echo "[Service]"                                 >> $f
-  echo "WorkingDirectory=$freqtrade_bots/$bot"     >> $f
-  echo "ExecStart=bash $freqtrade_bots/$bot/run"   >> $f
-  echo "Restart=on-failure"                        >> $f
-  echo ""                                          >> $f
-  echo "[Install]"                                 >> $f
-  echo "WantedBy=default.target"                   >> $f
+  echo "[Unit]"                                                    >> $f
+  echo "Description=Freqtrade $bot daemon"                         >> $f
+  echo "After=network.target"                                      >> $f
+  echo ""                                                          >> $f
+  echo "[Service]"                                                 >> $f
+  echo "WorkingDirectory=$freqtrade_bots/bots/$bot"                >> $f
+  echo "ExecStart=bash $freqtrade_bots/bots/$bot/run trade"        >> $f
+  echo "Restart=on-failure"                                        >> $f
+  echo ""                                                          >> $f
+  echo "[Install]"                                                 >> $f
+  echo "WantedBy=default.target"                                   >> $f
 done
 
 
@@ -67,7 +67,7 @@ done
 
 with_permission \
   "sudo loginctl enable-linger $USER" \
-  "Enable lingering mode for user $USER?"
+  "Enable lingering mode for user $USER? "
 with_permission \
   "sudo systemctl restart systemd-journald.service" \
-  "Restart Journald service?"
+  "Restart Journald service? "
