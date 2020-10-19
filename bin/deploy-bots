@@ -39,7 +39,7 @@ for bot in $@
 do
   # Maps CamelCase to snake_case
   f="$systemd_dir/$bot.service"
-  rm $f
+  rm -f $f  # force remove to avoid complaints
   touch $f
   echo "[Unit]"                                    >> $f
   echo "Description=Freqtrade $bot daemon"         >> $f
