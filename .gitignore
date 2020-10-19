@@ -3,3 +3,5 @@
 __pycache__
 config.json
 data
+user_data
+hyperopt.lock
